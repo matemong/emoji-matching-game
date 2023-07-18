@@ -42,7 +42,7 @@
       {:else if state === "paused"}
         <p>game paused</p>
       {:else if state === "waiting"}
-        <p>choose a level:</p>
+        <p>choose a difficulty level:</p>
       {/if}
       <div class="buttons">
         {#if state === "paused"}
@@ -87,6 +87,9 @@
   h1 {
     font-size: 3em;
     height: 1em;
+  }
+  p {
+    font-size: 2em;
   }
   h1 span {
     color: var(--accent);

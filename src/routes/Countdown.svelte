@@ -48,16 +48,19 @@
     top: 0;
   }
   .duration {
-    flex: 1;
-    height: 1em;
-    background: var(--bg-2);
-  }
-  .remaining {
-    position: absolute;
-    width: calc(100% * var(--p));
-    height: 100%;
-    background: var(--bg-3);
-  }
+		inline-size: 100%;
+		block-size: 1em;
+		background: var(--bg-2);
+		border-radius: 1em;
+		overflow: hidden;
+	}
+
+	.remaining {
+		position: absolute;
+		inline-size: calc(100% * var(--p));
+		block-size: 100%;
+		background: var(--bg-3);
+	}
   @media (min-aspect-ratio: 1) {
 		.countdown {
 			flex-direction: row-reverse;
