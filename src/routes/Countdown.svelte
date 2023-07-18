@@ -1,12 +1,14 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
+
   export let remaining: number;
   export let duration: number;
 </script>
 
-<div class="countdown">
+<div class="countdown" transition:fade={{ duration: 200 }}>
   <button on:click
     ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-      ><title>pause-circle</title><path
+      ><title>pause</title><path
         d="M15,16H13V8H15M11,16H9V8H11M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
         fill="#999"
       /></svg
@@ -22,14 +24,22 @@
     display: flex;
     align-items: center;
     gap: 1em;
+    justify-content: end;
+		width: 100%;
+		height: 100%;
   }
   button {
-    font-size: 8em;
+    font-size: max(8em, 2.4rem);
     width: 1em;
     height: 1em;
+    aspect-ratio: 1;
     background: transparent;
     border: none;
+    padding: 0;
   }
+  button svg {
+		display: block;
+	}
   svg {
     position: absolute;
     width: 100%;
@@ -40,12 +50,22 @@
   .duration {
     flex: 1;
     height: 1em;
-    background: #ccc;
+    background: var(--bg-2);
   }
   .remaining {
     position: absolute;
     width: calc(100% * var(--p));
     height: 100%;
-    background: #999;
+    background: var(--bg-3);
   }
+  @media (min-aspect-ratio: 1) {
+		.countdown {
+			flex-direction: row-reverse;
+			writing-mode: vertical-lr;
+		}
+
+		.remaining {
+			inset-inline-end: 0;
+		}
+	}
 </style>

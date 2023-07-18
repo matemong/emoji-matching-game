@@ -9,8 +9,8 @@
 </script>
 
 <div class="square" class:flipped={selected || found}>
-  <button on:click />
-  <div class="background" />
+  <button on:click disabled={selected || found} />
+  <div class="background" class:found />
   {#if !found}
     <img out:send={{key: `${emoji}:${group}`}} alt={emoji} src={get_twemoji_url(emoji)} />
   {/if}
@@ -19,39 +19,58 @@
 <style>
   .square {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    transform-style: preserve-3d;
-    transition: transform 0.4s;
+		width: 100%;
+		height: 100%;
+		align-items: center;
+		justify-content: center;
+		transition: filter 0.2s;
+		transform-style: preserve-3d;
+		transform: rotateY(180deg);
+		transition: transform 0.4s;
+		user-select: none;
   }
+
+  .square * {
+		backface-visibility: hidden;
+	}
+
   .flipped {
-    transform: rotateY(180deg);
-  }
+		transform: rotateY(0);
+		z-index: 2;
+	}
   .background {
-    background: white;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    border: 0.5em solid #eee;
-    border-radius: 1em;
-    font-size: inherit;
-  }
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background: var(--bg-1);
+		border: 2px solid var(--accent);
+		border-radius: 1em;
+		transition: border 0.2s;
+		pointer-events: none;
+	}
   button {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    background: #eee;
-    border-radius: 1em;
-    border: 0;
-  }
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: var(--bg-2);
+		border-radius: 1em;
+		transform: rotateY(180deg);
+		-webkit-tap-highlight-color: transparent;
+	}
+  button:disabled {
+		color: inherit;
+	}
   img {
-    width: 8em;
-    height: 8em;
-    pointer-events: none;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
-  }
+		display: block;
+		font-size: 6em;
+		width: 1em;
+		height: 1em;
+		line-height: 1;
+		z-index: 2;
+		pointer-events: none;
+	}
 </style>

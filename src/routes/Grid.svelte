@@ -13,7 +13,6 @@
   let reset_timeout: number;
 </script>
 
-<div class="grid">
   {#each grid as emoji, i}
     <Square
       {emoji}
@@ -24,8 +23,9 @@
         } else if (b === -1) {
           b = i;
           if (grid[a] === grid[b]) {
+            found = [...found, grid[a]];
             dispatch("found", {
-              emoji,
+              emoji: grid[a],
             });
           } else {
             reset_timeout = setTimeout(() => {
@@ -42,15 +42,4 @@
       group={grid.indexOf(emoji) === i ? "a" : "b"}
     />
   {/each}
-</div>
 
-<style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(var(--size), 1fr);
-    grid-template-rows: repeat(var(--size), 1fr);
-    height: 100%;
-    grid-gap: 0.5em;
-    perspective: 100vw;
-  }
-</style>

@@ -9,64 +9,87 @@
   let game: Game;
 </script>
 
-<Game
-  bind:this={game}
-  on:play={() => {
-    state = "playing";
-  }}
-  on:pause={() => {
-    state = "paused";
-  }}
-  on:win={() => {
-    state = "won";
-  }}
-  on:lose={() => {
-    state = "lost";
-  }}
-/>
+<svelte:head>
+	<title>emoji matching game</title>
+	<meta name="description" content="emoji matching game" />
 
-{#if state !== "playing"}
-  <Modal>
-    <header>
-      <h1>emoji <span>match</span>ing game</h1>
-    </header>
-    {#if state === "won" || state === "lost"}
-      <p>you {state} the game!</p>
-    {:else if state === "paused"}
-      <p>game paused</p>
-    {:else if state === "waiting"}
-      <p>choose a level:</p>
-    {/if}
-    <div class="buttons">
-      {#if state === "paused"}
-        <button>resume</button>
-        <button>quit</button>
-      {:else}
-        {#each levels as level}
-          <button
-            on:click={() => {
-              game.start(level);
-            }}>{level.label}</button
-          >
-        {/each}
+</svelte:head>
+
+<main>
+  <Game
+    bind:this={game}
+    on:play={() => {
+      state = "playing";
+    }}
+    on:pause={() => {
+      state = "paused";
+    }}
+    on:win={() => {
+      state = "won";
+    }}
+    on:lose={() => {
+      state = "lost";
+    }}
+  />
+
+  {#if state !== "playing"}
+    <Modal>
+      <header>
+        <h1>emoji <span>match</span>ing game</h1>
+      </header>
+      {#if state === "won" || state === "lost"}
+        <p>you {state}! play again?</p>
+      {:else if state === "paused"}
+        <p>game paused</p>
+      {:else if state === "waiting"}
+        <p>choose a level:</p>
       {/if}
-    </div>
-  </Modal>
-{/if}
+      <div class="buttons">
+        {#if state === "paused"}
+          <button on:click={() => game.resume()}>resume</button>
+          <button on:click={() => (state = "waiting")}> quit </button>
+        {:else}
+          {#each levels as level}
+            <button
+              on:click={() => {
+                game.start(level);
+                state = "playing";
+              }}>{level.label}</button
+            >
+          {/each}
+        {/if}
+      </div>
+    </Modal>
+  {/if}
 
-{#if state === "won"}
-  <div class="confetti" use:confetti={{
-    stageWidth: innerWidth,
-    stageHeight: innerHeight
-  }} />
-{/if}
+  {#if state === "won"}
+    <div
+      class="confetti"
+      use:confetti={{
+        stageWidth: innerWidth,
+        stageHeight: innerHeight,
+      }}
+    />
+  {/if}
+</main>
 
 <style>
+  main {
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  header {
+    font-size: min(5vw, 2rem);
+  }
   h1 {
-    font-size: 4em;
+    font-size: 3em;
+    height: 1em;
   }
   h1 span {
-    color: purple;
+    color: var(--accent);
   }
   .confetti {
     position: fixed;
@@ -75,5 +98,19 @@
     left: 50%;
     top: 30%;
     pointer-events: none;
+  }
+  .buttons {
+		display: flex;
+		justify-content: center;
+		gap: 0.5em;
+	}
+  button {
+    background: var(--accent);
+    color: white;
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
+    padding: 1em;
+    border-radius: 0.5em;
   }
 </style>

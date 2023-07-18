@@ -58,7 +58,7 @@
       remaining = remaining_at_start - (Date.now() - start);
 
       if (remaining <= 0) {
-        dispatch('lose');
+        dispatch("lose");
         playing = false;
       }
     }
@@ -69,24 +69,35 @@
 <div class="game" style="--size: {size}">
   <div class="info">
     {#if playing}
-      <Countdown {remaining} {duration} on:click={() => {
-        playing = false;
-        dispatch('pause');
-      }} />/>
+      <Countdown
+        {remaining}
+        {duration}
+        on:click={() => {
+          playing = false;
+          dispatch("pause");
+        }}
+      />
     {/if}
   </div>
   <div class="grid-container">
-    <Grid
-      {grid}
-      on:found={(e) => {
-        found = [...found, e.detail.emoji];
-        if (found.length === (size * size) / 2) {
-          dispatch('win');
-        }
-      }}
-      {found}
-    />
+    {#key grid}
+      <Grid
+        {grid}
+        on:found={(e) => {
+          found = [...found, e.detail.emoji];
+          if (found.length === (size * size) / 2) {
+            playing = false;
+            setTimeout(() => {
+              playing = false;
+              dispatch("win");
+            }, 1000);
+          }
+        }}
+        {found}
+      />
+    {/key}
   </div>
+
   <div class="info">
     <Found {found} />
   </div>
@@ -98,16 +109,39 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: min(1vmin, 0.5em);
+    gap: 2em;
     height: 100%;
-    font-size: min(1vmin, 0.3rem);
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(var(--size), 1fr);
+    grid-template-rows: repeat(var(--size), 1fr);
+    grid-gap: 1em;
+    width: 80em;
+    aspect-ratio: 1;
+    perspective: 100vw;
+    z-index: 2;
   }
 
   .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 80em;
     height: 10em;
   }
-  .grid-container {
-    width: 80em;
-    height: 80em;
+
+  @media (min-aspect-ratio: 1/1) {
+    .game {
+      flex-direction: row-reverse;
+    }
+
+    .info {
+      width: 10em;
+      height: 80em;
+    }
   }
 </style>
