@@ -84,13 +84,7 @@
   header {
     font-size: min(5vw, 2rem);
   }
-  h1 {
-    font-size: 3em;
-    height: 1em;
-  }
-  p {
-    font-size: 2em;
-  }
+  
   h1 span {
     color: var(--accent);
   }
